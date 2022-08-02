@@ -28,7 +28,7 @@ type ShoppingCartProviderProps = {
     children: ReactNode
 }
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
-    const [cartItems, setCartItems] = useLocalStorage<CartItem[]>('CART_ITEMS', [])
+    const [cartItems, setCartItems] = useLocalStorage<CartItem[]>('CART_ITEMS',[])
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
     const cartQuantity = cartItems.reduce(

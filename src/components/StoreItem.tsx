@@ -1,3 +1,4 @@
+import React from 'react'
 import { Card, Button } from 'react-bootstrap'
 import { useShoppingCart } from '../context/ShoppingCartContext'
 import { formatCurrency } from '../utils/formatCurrency'
@@ -16,40 +17,58 @@ function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
         decreaseCartQuantity,
         removeCart,
     } = useShoppingCart()
-    const quantity: number = getItemQuantity(id)
+    const quantity = getItemQuantity(id)
 
-    
     return (
-        <Card style={{ padding: 0, width: '220px', height: '100%' }}>
+        <Card style={{ width: '340px', padding: 10 }}>
             <Card.Img
-                src={imgUrl}
-                alt={name}
                 variant="top"
-                style={{ height: '150px', objectFit: 'cover' }}
+                alt={name}
+                src={imgUrl}
+                style={{ height: '250px', width: '100%', objectFit: 'cover' }}
             />
-            <Card.Body className="d-flex flex-column p-2 pt-2">
-                <Card.Title className="d-flex justify-content-between align-items-baseline">
-                    <h5 className="fs-6">{name}</h5>
-                    <h5 className="fs-6 text-muted">{formatCurrency(price)}</h5>
+            <Card.Body>
+                <Card.Title>
+                    <div className="d-flex justify-content-between">
+                        <h3>{name}</h3>
+                        <h3 className="text-muted">{formatCurrency(price)}</h3>
+                    </div>
                 </Card.Title>
-                <div className="mt-auto mb-1">
-                    {quantity === 0 ? (
-                        <Button size="sm" className="w-100" onClick={() => increaseCartQuantity(id)}>
-                            Add to cart
-                        </Button>
-                    ) : (
-                        <div className="d-flex flex-column align-items-center gap-2">
-                            <div className="d-flex align-items-center gap-2">
-                                <Button size="sm" onClick={() => decreaseCartQuantity(id)}>-</Button>
-                                <span>{quantity} in cart</span>
-                                <Button size="sm" onClick={() => increaseCartQuantity(id)}>+</Button>
-                            </div>
-                            <Button size="sm" variant="danger" onClick={() => removeCart(id)}>
-                                Remove
+                {quantity === 0 ? (
+                    <Button
+                        variant="primary"
+                        style={{ width: '100%' }}
+                        onClick={() => increaseCartQuantity(id)}
+                    >
+                        + Add to cart
+                    </Button>
+                ) : (
+                    <div className="d-flex flex-column gap-2 align-items-center">
+                        <div className="d-flex gap-2">
+                            <Button
+                                variant="primary"
+                                size="sm"
+                                onClick={() => decreaseCartQuantity(id)}
+                            >
+                                -
+                            </Button>
+                            <h3>{quantity} in cart</h3>
+                            <Button
+                                variant="primary"
+                                size="sm"
+                                onClick={() => increaseCartQuantity(id)}
+                            >
+                                +
                             </Button>
                         </div>
-                    )}
-                </div>
+                        <Button
+                            variant="danger"
+                            onClick={() => removeCart(id)}
+                        >
+                            Remove
+                        </Button>
+                    </div>
+                )}
             </Card.Body>
         </Card>
     )

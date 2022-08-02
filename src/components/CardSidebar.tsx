@@ -1,35 +1,48 @@
+import React from 'react'
 import { Offcanvas, Stack } from 'react-bootstrap'
 import { useShoppingCart } from '../context/ShoppingCartContext'
+import { formatCurrency } from '../utils/formatCurrency'
 import CartSidebarItem from './CartSidebarItem'
-import {formatCurrency} from '../utils/formatCurrency'
-import storeItems from '../data/items.json'
+import data from '../data/items.json'
 
 type CardSidebarProps = {
     isOpen: boolean
 }
 
 function CardSidebar({ isOpen }: CardSidebarProps) {
-    const { closeCart, cartItems } = useShoppingCart()
+    const { cartItems, closeCart } = useShoppingCart()
+
     return (
-        <Offcanvas show={isOpen} onHide={closeCart} placement="end">
+        <Offcanvas
+            show={isOpen}
+            onHide={closeCart}
+            placement="end"
+        >
             <Offcanvas.Header closeButton>
-                <Offcanvas.Title>Your cart</Offcanvas.Title>
+                <Offcanvas.Title className="fs-2 display-2">
+                    Your cart
+                </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
                 <Stack gap={3}>
                     {cartItems.map((item) => (
                         <CartSidebarItem key={item.id} {...item} />
                     ))}
-                    {cartItems.length > 0 && <div className='ms-auto fs-5 fw-bold'>
-                        Total: {" "}
-                        {formatCurrency(
-                            cartItems.reduce((total, currentItem) => {
-                                const item = storeItems.find(item => item.id === currentItem.id)
-                                return total + (item?.price || 0) * currentItem.quantity
-                            }, 0)
-                        )}
-                    </div>}
                 </Stack>
+                {cartItems.length > 0 && <h3 className="text-end mt-5">
+                    Total:{' '}
+                    {formatCurrency(
+                        cartItems.reduce((total, currentItem) => {
+                            const item = data.find(
+                                (item) => item.id === currentItem.id
+                            )
+                            return (
+                                total +
+                                (item?.price || 0) * currentItem.quantity
+                            )
+                        }, 0)
+                    )}
+                </h3>}
             </Offcanvas.Body>
         </Offcanvas>
     )
